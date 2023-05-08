@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardNet", "src\CardNet\Card
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hka", "src\Hka\Hka.csproj", "{A361946F-D609-4320-9A52-4B5272600E20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "src\Test\Test.csproj", "{7BEB9A3D-94CB-4584-9A31-66D1487C6E04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{A361946F-D609-4320-9A52-4B5272600E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A361946F-D609-4320-9A52-4B5272600E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A361946F-D609-4320-9A52-4B5272600E20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BEB9A3D-94CB-4584-9A31-66D1487C6E04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BEB9A3D-94CB-4584-9A31-66D1487C6E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BEB9A3D-94CB-4584-9A31-66D1487C6E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BEB9A3D-94CB-4584-9A31-66D1487C6E04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
