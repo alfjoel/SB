@@ -74,7 +74,7 @@ public class PrinterServer : BackgroundService
         {
             case FiscalReceipt statusEmv:
             {
-                var getstatus = new GetStatus(statusEmv);
+                var getstatus = new GetStatus(statusEmv,_config.Printers);
                 await getstatus.Run(socket, stoppingToken);
                 break;
             }
