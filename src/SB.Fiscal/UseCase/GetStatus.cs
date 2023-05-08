@@ -5,9 +5,9 @@ namespace SB.Fiscal.UseCase;
 
 public class GetStatus
 {
-    private FiscalReceipt _fiscalReceipt;
+    private ServiceRequest _fiscalReceipt;
     private List<PrinterDest> _printers;
-    public GetStatus(FiscalReceipt fiscalReceipt, List<PrinterDest> printers)
+    public GetStatus(ServiceRequest fiscalReceipt, List<PrinterDest> printers)
     {
         _fiscalReceipt = fiscalReceipt;
         _printers = printers;

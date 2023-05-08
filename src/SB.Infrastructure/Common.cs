@@ -13,9 +13,11 @@ public static class Common
         xmlEntity.LoadXml(xml);
         var section = xmlEntity.DocumentElement;
         var type = typeof(T);
-        var typeName = $"SB.Infrastructure.Entity.{section.Name}, {type.Assembly.FullName}";
+        var typeName = $"SB.Infrastructure.Entity.{section?.Name}, {type.Assembly.FullName}";
         var actualType = Type.GetType(typeName, true);
         xmlEntity.RemoveAll();
+        
+        if (actualType == null) throw new ArgumentException("Invalid Entity", "Error");
         
         var serializer = new XmlSerializer(actualType);
         using var reader = new StringReader(xml);

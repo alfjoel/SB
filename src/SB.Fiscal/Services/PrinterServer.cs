@@ -72,10 +72,10 @@ public class PrinterServer : BackgroundService
         var entity = Common.DeserializarXml<IEmv>(message);
         switch (entity)
         {
-            case FiscalReceipt statusEmv:
+            case ServiceRequest statusEmv:
             {
-                var getstatus = new GetStatus(statusEmv,_config.Printers);
-                await getstatus.Run(socket, stoppingToken);
+                var status = new GetStatus(statusEmv,_config.Printers);
+                await status.Run(socket, stoppingToken);
                 break;
             }
         }
