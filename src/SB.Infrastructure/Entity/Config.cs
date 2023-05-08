@@ -2,7 +2,11 @@ namespace SB.Infrastructure.Entity;
 
 public class Config
 {
-    public int PortOfOrigin { get; set; }
-    public string Type { get; set; }
-    public string DestinationIpPrinterFiscal { get; set; }
+    public string Country { get; set; }
+    public string Publish { get; set; }
+    public List<PrinterDest> Printers { get; set; }
+    public Config()
+    {
+        Printers = new List<PrinterDest>();
+    }
 }

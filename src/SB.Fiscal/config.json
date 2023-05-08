@@ -1,0 +1,11 @@
+{
+  "Publish": "",
+  "Country": "",
+  "Printers": [
+    {
+      "PortOfOrigin": 9100,
+      "DestinationIp": "192.168.24.253",
+      "PortOfDestination": 2105
+    }
+  ]
+}

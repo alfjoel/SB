@@ -1,12 +1,28 @@
+using Microsoft.Extensions.Options;
 using NetMQ;
 using NetMQ.Sockets;
+using SB.Fiscal.UseCase;
+using SB.Infrastructure;
 using SB.Infrastructure.Entity;
+using SB.Infrastructure.Interfaces;
 
-namespace SB.Payment.Services;
+namespace SB.Fiscal.Services;
 
 public class PrinterServer : BackgroundService
 {
-    private readonly AsyncList<Task> _tasks = new();
+    private readonly AsyncList<Task> _tasks;
+    private readonly ILogger<PrinterServer> _logger;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly Config _config;
+
+    public PrinterServer(ILogger<PrinterServer> logger, IServiceScopeFactory serviceScopeFactory,
+        IOptions<Config> configOptions)
+    {
+        _logger = logger;
+        _serviceScopeFactory = serviceScopeFactory;
+        _config = configOptions.Value;
+        _tasks =  new AsyncList<Task>();
+    }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -45,9 +61,25 @@ public class PrinterServer : BackgroundService
 
     private async Task Working(NetMQSocket socket, CancellationToken stoppingToken)
     {
-        bool more;
-        string messageIn = socket.ReceiveFrameString(out more);
-        Console.WriteLine("messageIn = {0}", messageIn);
+        var message = string.Empty;
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            var messageIn = socket.ReceiveFrameString(out var more);
+            message += messageIn;
+            if (!more) break;
+        } 
+        
+        var entity = Common.DeserializarXml<IEmv>(message);
+        switch (entity)
+        {
+            case FiscalReceipt statusEmv:
+            {
+                var getstatus = new GetStatus(statusEmv);
+                await getstatus.Run(socket, stoppingToken);
+                break;
+            }
+        }
+        
         socket.SendFrame("World");
     }
 }
