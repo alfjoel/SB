@@ -31,6 +31,7 @@ public class ServiceRequest : IEmv
     [XmlAttribute(AttributeName = "RequestType")]
     public string RequestType { get; set; }
 
+
     [XmlAttribute(AttributeName = "Version")]
     public double Version { get; set; }
 }

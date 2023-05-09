@@ -1,6 +1,7 @@
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using Microsoft.Extensions.Options;
-using NetMQ;
-using NetMQ.Sockets;
 using SB.Fiscal.UseCase;
 using SB.Infrastructure;
 using SB.Infrastructure.Entity;
@@ -21,29 +22,21 @@ public class PrinterServer : BackgroundService
         _logger = logger;
         _serviceScopeFactory = serviceScopeFactory;
         _config = configOptions.Value;
-        _tasks =  new AsyncList<Task>();
+        _tasks = new AsyncList<Task>();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using var server = new ResponseSocket();
-        server.Bind("tcp://*:5556");
-        server.Bind("tcp://*:5555");
-
-        using var poller = new NetMQPoller { server };
-        
-        server.ReceiveReady += async (s, a) =>
-        {
-            var task = Working(a.Socket, stoppingToken);
-            await _tasks.AddAsync(task, stoppingToken);
-        };
-        poller.RunAsync();
-
+        var tcpListener = new TcpListener(IPAddress.Any, _config.Port);
+        tcpListener.Start();
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            var tcpClient = await tcpListener.AcceptTcpClientAsync(stoppingToken);
+            var task = Working(new SocketClient(tcpClient), stoppingToken);
+            await _tasks.AddAsync(task, stoppingToken);
             var completedTasks = (await _tasks.ToArrayAsync(stoppingToken))
-                .Where(task => task.IsCompleted || task.IsCanceled || task.IsFaulted)
+                .Where(taskWorking => taskWorking.IsCompleted || taskWorking.IsCanceled || taskWorking.IsFaulted)
                 .ToList();
 
             foreach (var socketTask in completedTasks)
@@ -54,32 +47,25 @@ public class PrinterServer : BackgroundService
                 socketTask.Dispose();
                 Console.WriteLine("Remove Task With Socket");
             }
-
-            await Task.Delay(1000, stoppingToken).ConfigureAwait(false);
         }
     }
 
-    private async Task Working(NetMQSocket socket, CancellationToken stoppingToken)
+    private async Task Working(IClient socket, CancellationToken stoppingToken)
     {
-        var message = string.Empty;
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            var messageIn = socket.ReceiveFrameString(out var more);
-            message += messageIn;
-            if (!more) break;
-        } 
-        
+        var messageIn = socket.Receive(out var length);
+        var message = Encoding.UTF8.GetString(messageIn, 0, length);
+
         var entity = Common.DeserializarXml<IEmv>(message);
         switch (entity)
         {
             case ServiceRequest statusEmv:
             {
-                var status = new GetStatus(statusEmv,_config.Printers);
-                await status.Run(socket, stoppingToken);
+                var status = new GetStatus(statusEmv, _config.Printers, socket);
+                await status.Run(stoppingToken);
                 break;
             }
         }
-        
-        socket.SendFrame("World");
+
+        socket.Dispose();
     }
 }

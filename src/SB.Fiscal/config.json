@@ -1,11 +1,12 @@
 {
   "Publish": "",
   "Country": "",
+  "Port": 6205,
   "Printers": [
     {
-      "PortOfOrigin": 9100,
-      "DestinationIp": "192.168.24.253",
-      "PortOfDestination": 2105
+      "DeviceNumber": 601,
+      "DestinationIp": "192.168.10.254",
+      "PortOfDestination": 1026
     }
   ]
 }

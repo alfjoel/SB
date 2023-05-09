@@ -9,11 +9,11 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.3" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-        <PackageReference Include="NetMQ" Version="4.0.1.12" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SB.Hka\SB.Hka.csproj" />
       <ProjectReference Include="..\SB.LiteDb\SB.LiteDb.csproj" />
     </ItemGroup>
 
