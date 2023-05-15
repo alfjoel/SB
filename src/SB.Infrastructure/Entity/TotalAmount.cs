@@ -8,5 +8,5 @@ public class TotalAmount
     [XmlAttribute(AttributeName = "Currency")]
     public string Currency { get; set; }
 
-    [XmlText] public double Text { get; set; }
+    [XmlText] public decimal Text { get; set; }
 }

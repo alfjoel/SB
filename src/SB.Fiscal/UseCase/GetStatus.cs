@@ -52,29 +52,37 @@ public class GetStatus
             await Task.Delay(100, stoppingToken);
             return;
         }
-        
-        using var client = new SocketClient(findPrinter.DestinationIp, findPrinter.PortOfDestination,1000,1000);
-        if (!client.Connect())
-        {
-            status.Status = "Error";
-            status.StatusDescription.Text = "Offline";
-            status.OverallResult = "Failure";
 
-            SendStatus(status);
-            await Task.Delay(100, stoppingToken);
-            return;
+        try
+        {
+            await findPrinter.Semaphore.WaitAsync(stoppingToken);
+            using var client = new SocketClient(findPrinter.DestinationIp, findPrinter.PortOfDestination, 1000, 1000);
+            if (!client.Connect())
+            {
+                status.Status = "Error";
+                status.StatusDescription.Text = "Offline";
+                status.OverallResult = "Failure";
+
+                SendStatus(status);
+                await Task.Delay(100, stoppingToken);
+                return;
+            }
+
+            var printer = new PrinterHka(client);
+            if (!printer.CheckFp())
+            {
+                status.Status = "Error";
+                status.StatusDescription.Text = "Offline";
+                status.OverallResult = "Failure";
+
+                SendStatus(status);
+                await Task.Delay(100, stoppingToken);
+                return;
+            }
         }
-
-        var printer = new PrinterHka(client);
-        if (!printer.CheckFp())
+        finally
         {
-            status.Status = "Error";
-            status.StatusDescription.Text = "Offline";
-            status.OverallResult = "Failure";
-
-            SendStatus(status);
-            await Task.Delay(100, stoppingToken);
-            return;
+            findPrinter.Semaphore.Release();
         }
 
         SendStatus(status);

@@ -1,5 +1,6 @@
 using SB.Infrastructure;
 using SB.Infrastructure.Entity;
+using SB.Infrastructure.Interfaces;
 
 namespace SB.Test;
 
@@ -23,5 +24,36 @@ public class ConvertXMLToClassTest
         
         Assert.Equal(2055, requestGetStatus.ZrNumber);
 
+    }
+
+    [Fact]
+    public void ServiceRequestFiscalInvoice()
+    {
+
+        string xml = @"<?xml version=""1.0"" encoding=""windows-1250""?><FiscalServiceRequest RequestID=""19"" RequestType=""FiscalInvoice"" Version=""1.0""><MerchantID>605</MerchantID>
+            <ZRNumber>7005</ZRNumber>
+            <DeviceNumber>605</DeviceNumber>
+            <DeviceType>6</DeviceType>
+            <DeviceInvoiceNumber>1514</DeviceInvoiceNumber>
+            <ReceiptPrinterWidth>40</ReceiptPrinterWidth>
+            <POSTimeStamp>2023-05-14T17:41:43.134</POSTimeStamp>
+            <TimeoutResponse>20</TimeoutResponse>
+            <LanguageCode>en</LanguageCode>
+            <Items><ItemInfo><ArticleId>604</ArticleId>
+            <Name>TARJETA 10$</Name>
+            <EPAN>02996317005061133500001FFFFF</EPAN>
+            <Quantity></Quantity>
+            <Amount>25.40</Amount>
+            <TaxRate TaxType=""A"">16.00</TaxRate>
+            <EntryTime>2023-05-14T17:41:38</EntryTime>
+            </ItemInfo></Items><TransactionInfo><TimeStamp>2023-05-14T17:41:38</TimeStamp>
+            <TotalAmount Currency=""EUR"">25.40</TotalAmount>
+            <PaidAmount Type=""Cash"" Currency=""EUR"">25.40</PaidAmount>
+            </TransactionInfo></FiscalServiceRequest>";
+        
+        
+        var requestFiscalInvoice = Common.DeserializarXml<FiscalServiceRequest>(xml);
+        Assert.Equal("25.40", requestFiscalInvoice.TransactionInfo.TotalAmount.Text.ToString());
+        Assert.Equal("TARJETA 10$", requestFiscalInvoice.Items.ItemInfo.First().Name);
     }
 }

@@ -11,11 +11,28 @@ public class ItemInfo {
     [XmlElement(ElementName="Name")] 
     public string Name { get; set; } 
 
-    [XmlElement(ElementName="Epan")] 
-    public double Epan { get; set; } 
+    [XmlElement(ElementName="EPAN")] 
+    public string Epan { get; set; } 
+    
+    [XmlIgnore]
+    public decimal? Quantity { get; set; }
 
-    [XmlElement(ElementName="Quantity")] 
-    public int Quantity { get; set; } 
+    [XmlElement("Quantity")]
+    public string QuantityString
+    {
+        get { return Quantity.HasValue ? Quantity.ToString() : ""; }
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                Quantity = null;
+            }
+            else
+            {
+                Quantity = decimal.Parse(value);
+            }
+        }
+    }
 
     [XmlElement(ElementName="Amount")] 
     public double Amount { get; set; } 

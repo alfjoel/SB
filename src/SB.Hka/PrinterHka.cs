@@ -35,8 +35,19 @@ public class PrinterHka : IPrinter
         SendCmd("I0Z", false);
     }
 
-    public void PrintDocument()
+    public bool PrintDocument(string productName, decimal price)
     {
+        var doc = new Document();
+        var det = new Detail(productName, price, 1, Constants.CommandTasa1);
+        doc.AddDetail(det);
+        foreach (var cmd in doc.GeneratorCmd())
+        {
+            if(!SendCmd(cmd))
+                return false;
+            
+        }
+
+        return true;
     }
 
 

@@ -29,12 +29,22 @@ public class PrinterServer : BackgroundService
     {
         var tcpListener = new TcpListener(IPAddress.Any, _config.Port);
         tcpListener.Start();
+        
+        var garbageCollector = GarbageCollector(stoppingToken);
 
         while (!stoppingToken.IsCancellationRequested)
         {
             var tcpClient = await tcpListener.AcceptTcpClientAsync(stoppingToken);
             var task = Working(new SocketClient(tcpClient), stoppingToken);
             await _tasks.AddAsync(task, stoppingToken);
+        }
+        await garbageCollector.WaitAsync(stoppingToken);
+    }
+
+    private async Task GarbageCollector(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
+        {
             var completedTasks = (await _tasks.ToArrayAsync(stoppingToken))
                 .Where(taskWorking => taskWorking.IsCompleted || taskWorking.IsCanceled || taskWorking.IsFaulted)
                 .ToList();
@@ -47,6 +57,7 @@ public class PrinterServer : BackgroundService
                 socketTask.Dispose();
                 Console.WriteLine("Remove Task With Socket");
             }
+            await Task.Delay(1000, stoppingToken);
         }
     }
 
@@ -63,6 +74,12 @@ public class PrinterServer : BackgroundService
             {
                 var status = new GetStatus(statusEmv, _config.Printers, socket);
                 await status.Run(stoppingToken);
+                break;
+            }
+            case FiscalServiceRequest fiscalServiceRequest:
+            {
+                var fiscal = new FiscalInvoice(fiscalServiceRequest, _config.Printers, socket);
+                await fiscal.Run(stoppingToken);
                 break;
             }
         }
