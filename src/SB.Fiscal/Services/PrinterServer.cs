@@ -54,6 +54,7 @@ public class PrinterServer : BackgroundService
     {
         var messageIn = socket.Receive(out var length);
         var message = Encoding.UTF8.GetString(messageIn, 0, length);
+        Console.WriteLine(message);
 
         var entity = Common.DeserializarXml<IEmv>(message);
         switch (entity)

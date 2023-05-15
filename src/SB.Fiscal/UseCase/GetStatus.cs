@@ -41,7 +41,7 @@ public class GetStatus
             Status = "Idle"
         };
 
-        var findPrinter = _printers.FirstOrDefault(x => x.DeviceNumber == _fiscalReceipt.DeviceNumber);
+        var findPrinter = _printers.FirstOrDefault(x => x.MachineId == _fiscalReceipt.MerchantId);
         if (findPrinter == null)
         {
             status.Status = "Error";
@@ -84,6 +84,7 @@ public class GetStatus
     private void SendStatus(ServiceResponse status)
     {
         string xml = Common.SerializarXml(status);
+        Console.WriteLine(xml);
         var byteArray = Encoding.UTF8.GetBytes(xml);
         _socket.Send(byteArray);
     }

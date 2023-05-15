@@ -4,7 +4,7 @@
   "Port": 6205,
   "Printers": [
     {
-      "DeviceNumber": 601,
+      "MachineId": 601,
       "DestinationIp": "192.168.10.254",
       "PortOfDestination": 1026
     }
