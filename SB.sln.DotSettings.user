@@ -1,6 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=be69c8ee_002D275e_002D4623_002Dab3b_002D1eeccd2c4725/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ServiceRequestGetStatusTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::2932F5CF-41C6-4ED0-B50B-0163DB8F86B1::net7.0::SB.Test.ConvertXMLToClassTest.ServiceRequestFiscalInvoice&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=be69c8ee_002D275e_002D4623_002Dab3b_002D1eeccd2c4725/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ServiceRequestGetStatusTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::2932F5CF-41C6-4ED0-B50B-0163DB8F86B1::net7.0::SB.Test.ConvertXMLToClassTest.ServiceRequestFiscalInvoice&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::2932F5CF-41C6-4ED0-B50B-0163DB8F86B1::net7.0::SB.Test.ConvertXMLToClassTest.ConvertGuidtoString&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

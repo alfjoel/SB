@@ -55,7 +55,7 @@ public class PrinterServer : BackgroundService
                     continue;
 
                 socketTask.Dispose();
-                Console.WriteLine("Remove Task With Socket");
+                _logger.LogInformation("Remove Task With Socket");
             }
             await Task.Delay(1000, stoppingToken);
         }
@@ -74,6 +74,7 @@ public class PrinterServer : BackgroundService
             {
                 var status = new GetStatus(statusEmv, _config.Printers, socket);
                 await status.Run(stoppingToken);
+                socket.Dispose();
                 break;
             }
             case FiscalServiceRequest fiscalServiceRequest:
@@ -83,7 +84,6 @@ public class PrinterServer : BackgroundService
                 break;
             }
         }
-
-        socket.Dispose();
+        
     }
 }

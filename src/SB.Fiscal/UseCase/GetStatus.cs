@@ -79,6 +79,8 @@ public class GetStatus
                 await Task.Delay(100, stoppingToken);
                 return;
             }
+            client.Dispose();
+            
         }
         finally
         {

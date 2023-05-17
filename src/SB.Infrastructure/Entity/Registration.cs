@@ -24,10 +24,10 @@ public class Registration {
     public DateTime TimeStamp { get; set; } 
 
     [XmlAttribute(AttributeName="FiscalBatch")] 
-    public int FiscalBatch { get; set; } 
+    public string FiscalBatch { get; set; } 
 
     [XmlAttribute(AttributeName="STAN")] 
-    public int STAN { get; set; } 
+    public string STAN { get; set; } 
 
     [XmlText] 
     public string Text { get; set; } 

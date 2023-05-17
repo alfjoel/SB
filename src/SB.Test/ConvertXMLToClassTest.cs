@@ -56,4 +56,15 @@ public class ConvertXMLToClassTest
         Assert.Equal("25.40", requestFiscalInvoice.TransactionInfo.TotalAmount.Text.ToString());
         Assert.Equal("TARJETA 10$", requestFiscalInvoice.Items.ItemInfo.First().Name);
     }
+
+    [Fact]
+    public void ConvertGuidtoString()
+    {
+        Guid guid = Guid.NewGuid();
+        var guidString = guid.ToString().Replace("-", "");
+        Console.WriteLine(guidString.Substring(0,16));
+        Console.WriteLine(guidString.Substring(16,16));
+        Assert.Equal(32,guidString.Length);
+        
+    }
 }

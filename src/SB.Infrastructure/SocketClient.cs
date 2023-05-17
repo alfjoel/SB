@@ -5,7 +5,7 @@ using SB.Infrastructure.Interfaces;
 
 namespace SB.Infrastructure;
 
-public class SocketClient: IClient
+public class SocketClient : IClient
 {
     private const int KSocketPoolTimeoutMicro = 1_000_000;
     private const int KSocketPoolTimeoutMicro2 = 100_000;
@@ -19,7 +19,7 @@ public class SocketClient: IClient
     private readonly int _connectTimeoutMillis;
     private Socket? _socket;
     private bool _isDisposedFlag;
-    
+
     public SocketClient(string address, int port, int readWriteTimeoutMillis, int connectTimeoutMillis)
     {
         _address = address;
@@ -27,11 +27,12 @@ public class SocketClient: IClient
         _readWriteTimeoutMillis = readWriteTimeoutMillis;
         _connectTimeoutMillis = connectTimeoutMillis;
     }
+
     public SocketClient(TcpClient received)
     {
-    _socket = received.Client;
+        _socket = received.Client;
     }
-    
+
     public void Dispose()
     {
         Disconnect();
@@ -39,10 +40,11 @@ public class SocketClient: IClient
     }
 
     public bool IsConnected => _socket?.Connected ?? false;
+
     public bool Connect()
     {
         ThrowIfDisposed();
-        if (_socket is not null && IsConnected) return false;
+        if (_socket is not null && IsConnected || _address is null) return false;
         if (!TryGetIpAddress(_address, out var ip)) return false;
         if (ip is null) return false;
 
@@ -72,7 +74,7 @@ public class SocketClient: IClient
 
         return _socket?.Connected ?? false;
     }
-    
+
     private bool TryGetIpAddress(string input, out IPAddress? ipAddress)
     {
         ipAddress = null;
@@ -98,7 +100,6 @@ public class SocketClient: IClient
         ThrowIfDisposed();
         if (_socket is null || !IsConnected || input.Length == 0) return;
         if (!IsConnected) Connect(); // TODO: Should we force a connection when sending data without connecting before?
-
         var totalBytesSent = 0;
         var totalBytesToSend = input.Length;
         do
@@ -143,7 +144,6 @@ public class SocketClient: IClient
 
                     // Poll the socket for reception with a timeout
                     if (_socket.Poll(timeout, SelectMode.SelectRead))
-                        // if (WaitForData())
                     {
                         // This call will not block
                         _lastread = false;
@@ -156,7 +156,7 @@ public class SocketClient: IClient
                     }
 
                     if (read == 0) break;
-
+                    
                     memoryStream.Write(buffer, 0, read);
                     memoryStream.Flush();
                     totalBytesReceived += read;
@@ -208,6 +208,7 @@ public class SocketClient: IClient
         ThrowIfDisposed();
         DisconnectSocket();
     }
+
     private void ThrowIfDisposed()
     {
         if (!Volatile.Read(ref _isDisposedFlag)) return;
@@ -215,7 +216,7 @@ public class SocketClient: IClient
         var typeName = GetType().Name;
         throw new ObjectDisposedException(typeName);
     }
-    
+
     private void DisconnectSocket()
     {
         if (_socket is null || !IsConnected) return;
