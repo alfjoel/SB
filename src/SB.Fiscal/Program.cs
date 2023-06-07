@@ -19,6 +19,7 @@ builder.Services.AddSingleton<ILiteDbSettings>(_ => new LiteDbSetting
     { ConnectionString = Common.ToApplicationPath("storecore.dll") });
 
 builder.Services.AddHostedService<PrinterServer>();
+builder.Services.AddHostedService<ReportZBackgroundService>();
 
 var app = builder.Build();
 
