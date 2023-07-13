@@ -1,4 +1,6 @@
-namespace SB.Infrastructure.Entity;
+using SB.Infrastructure.Entity;
+
+namespace SB.Fiscal;
 
 public class Config
 {
@@ -7,6 +9,7 @@ public class Config
     public TimeSpan ZReportExecutionTime { get; set; } = new TimeSpan(24, 0, 0);
     public int Port { get; set; }
     public List<PrinterDest> Printers { get; set; }
+
     public Config()
     {
         Printers = new List<PrinterDest>();

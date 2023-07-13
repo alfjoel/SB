@@ -17,4 +17,17 @@
       <ProjectReference Include="..\SB.LiteDb\SB.LiteDb.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="pud\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="pud\appsettings.json" />
+      <_ContentIncludedByDefault Remove="pud\config.json" />
+      <_ContentIncludedByDefault Remove="pud\pud\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="pud\pud\appsettings.json" />
+      <_ContentIncludedByDefault Remove="pud\pud\config.json" />
+      <_ContentIncludedByDefault Remove="pud\pud\SB.Fiscal.deps.json" />
+      <_ContentIncludedByDefault Remove="pud\pud\SB.Fiscal.runtimeconfig.json" />
+      <_ContentIncludedByDefault Remove="pud\SB.Fiscal.deps.json" />
+      <_ContentIncludedByDefault Remove="pud\SB.Fiscal.runtimeconfig.json" />
+    </ItemGroup>
+
 </Project>

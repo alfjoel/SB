@@ -1,7 +1,6 @@
 using SB.Fiscal;
 using SB.Fiscal.Services;
 using SB.Infrastructure;
-using SB.Infrastructure.Entity;
 using SB.LiteDb;
 
 var builder = WebApplication.CreateBuilder(args);
