@@ -7,8 +7,6 @@ namespace SB.Infrastructure;
 
 public class SocketClient : IClient
 {
-    private const int KSocketPoolTimeoutMicro = 1_000_000;
-    private const int KSocketPoolTimeoutMicro2 = 100_000;
     private const int KSendSocketProbablyFullDelayMillis = 30;
     private const int KReceiveSocketProbablyEmptyDelayMillis = 30;
     private bool _lastread;
@@ -123,7 +121,7 @@ public class SocketClient : IClient
         } while (totalBytesSent < totalBytesToSend);
     }
 
-    public byte[] Receive(out int totalBytesReceived)
+    public byte[] Receive(out int totalBytesReceived, int timeoutDefault = 1_000_000)
     {
         ThrowIfDisposed();
         var buffer = ArrayPool<byte>.Shared.Rent(4096);
@@ -140,7 +138,7 @@ public class SocketClient : IClient
                 try
                 {
                     int read;
-                    var timeout = _lastread ? KSocketPoolTimeoutMicro : KSocketPoolTimeoutMicro2;
+                    var timeout = _lastread ? timeoutDefault : 100_000;
 
                     // Poll the socket for reception with a timeout
                     if (_socket.Poll(timeout, SelectMode.SelectRead))
@@ -156,7 +154,7 @@ public class SocketClient : IClient
                     }
 
                     if (read == 0) break;
-                    
+
                     memoryStream.Write(buffer, 0, read);
                     memoryStream.Flush();
                     totalBytesReceived += read;

@@ -8,7 +8,7 @@ public interface IClient: IDisposable
 
     void Send(in byte[] input);
 
-    byte[] Receive(out int totalBytesReceived);
+    byte[] Receive(out int totalBytesReceived, int timeoutDefault = 1_000_000);
 
     void Clear();
 
